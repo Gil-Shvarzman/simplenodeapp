@@ -1,5 +1,9 @@
 name: build
-on: push
+on: 
+  pull_request:
+  issues:
+    types:
+      - opened
 jobs:
   build:
     name: my job
@@ -21,3 +25,20 @@ jobs:
           FIRST_NAME: Gil
           LAST_NAME: Shvarzman
         run: echo $MY_VAR $FIRST_NAME $MIDDLE_NAME $LAST_NAME
+      
+      - name: my second job
+        if: success()
+        run: echo The previous step has finished successfuly.
+      
+      - name: my third step
+        uses: actions/checkout@v1
+        with:
+          node-version: 12
+          registry-url: https://npm.pkg.github.com/
+          
+      - name: my fourth step
+        uses: actions/first-interaction@ccbe3294106da798f41d8df739c6f3980c5c1254
+        with: 
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: 'This is your first issue!'
+          pr-message: 'This is your first PR! Congrats :)'
